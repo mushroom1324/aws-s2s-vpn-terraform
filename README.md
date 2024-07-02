@@ -28,13 +28,13 @@ EC2-A에서는 192.168.0.0/16의 ICMP 프로토콜을 허용하여, Ping 테스�
 
 레포지토리 소스 파일을 이용하여 간단히 실습 환경을 구축할 수 있습니다. 그 전에 `aws configure` 명령어로 리소스를 생성할 환경을 정의합니다. 프로필 설정과 관련한 방법에 대해서는 [다음 문서를 참조하세요.](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_access-keys.html)
 
-```json
+```
 aws configure --profile s2s
 ```
 
 `profile` 옵션을 지정하여 `s2s` 프로필에 엑세스 키 값을 입력합니다. 프로필 지정 후 다음과 같이 실행합니다:
 
-```json
+```
 terraform init
 terraform apply
 ```
@@ -45,7 +45,7 @@ terraform apply
 
 Site-to-Site VPN 연결 리소스를 정의하는 블럭은 다음과 같습니다:
 
-```ebnf
+```
 # Site to Site VPN Connection
 resource "aws_vpn_connection" "aws_vpn_connection" {
   provider = aws.seoul
