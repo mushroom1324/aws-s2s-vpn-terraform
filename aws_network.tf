@@ -120,10 +120,17 @@ resource "aws_vpn_connection" "aws_vpn_connection" {
   type                = "ipsec.1"
   static_routes_only  = true
 
-  local_ipv4_network_cidr = aws_vpc.aws_vpc.cidr_block
-  remote_ipv4_network_cidr = aws_vpc.customer_vpc.cidr_block
+  local_ipv4_network_cidr  = aws_vpc.customer_vpc.cidr_block
+  remote_ipv4_network_cidr = aws_vpc.aws_vpc.cidr_block
 
-tags = {
+  tags = {
     Name = "${var.project_name}-${var.environment_aws}-vpn"
   }
+}
+
+# VPN Connection Route
+resource "aws_vpn_connection_route" "aws_vpn_connection_route" {
+  provider               = aws.seoul
+  destination_cidr_block = aws_vpc.customer_vpc.cidr_block
+  vpn_connection_id      = aws_vpn_connection.aws_vpn_connection.id
 }
