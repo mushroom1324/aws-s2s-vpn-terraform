@@ -10,7 +10,7 @@ Site-to-Site VPN은 AWS에서 제공하는 관리형 VPN 서비스입니다. Hig
 
 **Site-to-Site VPN 환경 구축 실습**
 
-![s2s1.png](..%2F..%2FDownloads%2Fs2s1.png)
+<img width="911" alt="s2s1" src="https://github.com/mushroom1324/aws-s2s-vpn-terraform/assets/76674422/7bcfaa39-c9fe-4740-b374-bcec67cac331">
 
 AWS Network - Customer Network의 Site-to-Site VPN 연결을 구성해보겠습니다. 다음을 위해선 실제 Customer Network가 필요하지만, 저희는 도쿄 리전에 있는 EC2 인스턴스로 Customer Network를 흉내내어 구성해보겠습니다. 기본적 환경 구성의 경우 테라폼 소스 코드를 공개해 두었으므로 이를 통해 손쉽게 구성 가능합니다.
 
@@ -39,7 +39,7 @@ terraform init
 terraform apply
 ```
 
-![s2s2.png](..%2F..%2FDownloads%2Fs2s2.png)
+<img width="686" alt="s2s2" src="https://github.com/mushroom1324/aws-s2s-vpn-terraform/assets/76674422/80351163-fd3a-4f83-9023-2c3529a3e485">
 
 정상적으로 실행하였다면 다음과 같은 결과를 기대할 수 있습니다.
 
@@ -64,15 +64,15 @@ resource "aws_vpn_connection" "aws_vpn_connection" {
 
 Site to Site VPN 설정 후, AWS 콘솔을 통해 Customer VPC의 EC2에 사용할 VPN Configuration File을 다운로드합니다. 이 때 Vendor를 Openswan으로 선택합니다. (Libreswan은 Openswan의 포크입니다)
 
-![s2s3.png](..%2F..%2FDownloads%2Fs2s3.png)
+<img width="1440" alt="s2s3" src="https://github.com/mushroom1324/aws-s2s-vpn-terraform/assets/76674422/6610e996-7145-4bcd-ae31-b7560e199cee">
 
-![s2s4.png](..%2F..%2FDownloads%2Fs2s4.png)
+<img width="1440" alt="s2s4" src="https://github.com/mushroom1324/aws-s2s-vpn-terraform/assets/76674422/b522447f-9c9c-4544-a402-7b97805c2b55">
 
 Configuration File 예시
 
 이제 EC2에서 Libreswan을 구성합시다. AWS 매니지먼트 콘솔에서 Tokyo 리전의 EC2(Customer EC2)로 Instance Connect를 통해 접속합니다.
 
-![s2s5.png](..%2F..%2FDownloads%2Fs2s5.png)
+<img width="627" alt="s2s5" src="https://github.com/mushroom1324/aws-s2s-vpn-terraform/assets/76674422/69a8bee7-87c7-4eb7-b1c7-bdf47325e6aa">
 
 Amazon Linux 2023부터는 Openswan을 기본적으로 지원하지 않기 때문에, 추가적인 설정이 필요합니다. 먼저 레포지토리를 생성하고 Libreswan을 설치해야 합니다. 따라서 EC2에 접속했다면 다음 명령어를 통해 repo 파일을 생성해줍니다.
 
@@ -105,7 +105,7 @@ skip_if_unavailable=False
 sudo dnf --enablerepo=fedora install libreswan -y
 ```
 
-![설치가 완료된 모습](..%2F..%2FDownloads%2Fs2s6.png)
+<img width="1386" alt="s2s6" src="https://github.com/mushroom1324/aws-s2s-vpn-terraform/assets/76674422/95af6147-efd1-45bf-b0a5-748172d2b133">
 
 설치가 완료된 모습
 
@@ -135,7 +135,7 @@ sudo sysctl -p
 sudo vi /etc/ipsec.conf
 ```
 
-![s2s7.png](..%2F..%2FDownloads%2Fs2s7.png)
+<img width="1401" alt="s2s7" src="https://github.com/mushroom1324/aws-s2s-vpn-terraform/assets/76674422/87fc9508-777d-4be2-a15a-e435b822f092">
 
 마지막줄에 제대로 설정되어 있는 것을 확인하였으므로 추가적 작업이 필요하지 않습니다. 만약 #로 주석 처리되어 있다면 주석을 해제합니다.
 
@@ -226,11 +226,11 @@ sudo systemctl start ipsec.service
 sudo systemctl status ipsec.service
 ```
 
-![s2s8.png](..%2F..%2FDownloads%2Fs2s8.png)
+<img width="1384" alt="s2s8" src="https://github.com/mushroom1324/aws-s2s-vpn-terraform/assets/76674422/a8f19e33-f09c-4062-b894-2d8925adb4bf">
 
 터널이 생성되는 것을 확인할 수 있습니다. 다음과 같은 로그가 출력된다면 ipsec 터널이 정상적으로 연결되었음을 나타냅니다.
 
-![s2s9.png](..%2F..%2FDownloads%2Fs2s9.png)
+<img width="1202" alt="s2s9" src="https://github.com/mushroom1324/aws-s2s-vpn-terraform/assets/76674422/df9c5e9c-2581-4c2b-85b8-31bc0c1f29d0">
 
 AWS 매니지먼트 콘솔에서도 터널이 UP인 것을 확인할 수 있습니다.
 
@@ -240,7 +240,7 @@ AWS 매니지먼트 콘솔에서도 터널이 UP인 것을 확인할 수 있습�
 ping <private-ip>
 ```
 
-![s2s10.png](..%2F..%2FDownloads%2Fs2s10.png)
+<img width="1386" alt="s2s10" src="https://github.com/mushroom1324/aws-s2s-vpn-terraform/assets/76674422/936b9207-da54-4402-87b5-b8e2c5f407ca">
 
 **트러블슈팅**
 
@@ -250,7 +250,7 @@ ping <private-ip>
     - 이 경우 aws.conf 파일에 입력한 알고리즘 선택에 문제가 있을 확률이 높습니다. 올바른 알고리즘 조합을 사용하였는지 검토하고 `sudo systemctl restart ipsec.service` 명령어를 통해 다시 실행해보세요.
     - `journalctl -xe | grep pluto` 명령어를 통해 더 자세한 로그를 확인할 수 있습니다.
 
-   ![s2s11.png](..%2F..%2FDownloads%2Fs2s11.png)
+	<img width="1381" alt="s2s11" src="https://github.com/mushroom1324/aws-s2s-vpn-terraform/assets/76674422/d072e9e5-35ca-4777-979a-a14c2e1a0889">
 
     - 저의 경우에도 해당 명령어를 통해 ‘modp1024’를 지원하지 않는 것을 파악했습니다.
 
