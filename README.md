@@ -8,7 +8,7 @@ VPC와 온프레미스 간 전송에 있어서 Direct Connect같은 dedicated co
 
 Site-to-Site VPN은 AWS에서 제공하는 관리형 VPN 서비스입니다. High Availability를 위해 두 개의 터널을 제공하여, 하나의 터널이 다운되어도 다른 하나의 터널로 트래픽을 연결할 수 있도록 도와줍니다. 또한 Site-to-Site VPN을 사용하면 CloudWatch를 통해 모니터링이 가능하여 다양한 시나리오에서 트러블슈팅을 할 수 있다는 점도 있습니다. 그리고 관리형 서비스이기 때문에 매뉴얼한 IPsec 구성보다 훨씬 간편하다는 점도 있습니다.
 
-**Site-to-Site VPN 환경 구축 실습**
+**Site-to-Site VPN 실습 환경 구축**
 
 <img width="911" alt="s2s1" src="https://github.com/mushroom1324/aws-s2s-vpn-terraform/assets/76674422/7bcfaa39-c9fe-4740-b374-bcec67cac331">
 
@@ -45,22 +45,34 @@ terraform apply
 
 Site-to-Site VPN 연결 리소스를 정의하는 블럭은 다음과 같습니다:
 
-```
+``` terraform
 # Site to Site VPN Connection
 resource "aws_vpn_connection" "aws_vpn_connection" {
-  provider = aws.seoul
-  vpn_gateway_id = aws_vpn_gateway.aws_vpn_gateway.id
+  provider            = aws.seoul
+  vpn_gateway_id      = aws_vpn_gateway.aws_vpn_gateway.id
   customer_gateway_id = aws_customer_gateway.aws_customer_gateway.id
-  type = "ipsec.1"
-  static_routes_only = true
+  type                = "ipsec.1"
+  static_routes_only  = true
+
+  local_ipv4_network_cidr  = aws_vpc.customer_vpc.cidr_block
+  remote_ipv4_network_cidr = aws_vpc.aws_vpc.cidr_block
 
   tags = {
     Name = "${var.project_name}-${var.environment_aws}-vpn"
   }
 }
+
+# VPN Connection Route
+resource "aws_vpn_connection_route" "aws_vpn_connection_route" {
+  provider               = aws.seoul
+  destination_cidr_block = aws_vpc.customer_vpc.cidr_block
+  vpn_connection_id      = aws_vpn_connection.aws_vpn_connection.id
+}
 ```
 
 여기서 static_routes_only 를 false로 지정하면 BGP를 이용한 dynamic routing이 가능하도록 구성해야 합니다. 즉, Customer Gateway에서 BGP를 지원해야 하므로, 해당 실습에선 static_routes_only를 true 로 설정했습니다.
+
+`local_ipv4_network_cidr` 을 aws_vpc의 cidr로 오해할 수 있습니다. 이에 주의해야 합니다.
 
 Site to Site VPN 설정 후, AWS 콘솔을 통해 Customer VPC의 EC2에 사용할 VPN Configuration File을 다운로드합니다. 이 때 Vendor를 Openswan으로 선택합니다. (Libreswan은 Openswan의 포크입니다)
 
