@@ -43,6 +43,8 @@ terraform apply
 
 정상적으로 실행하였다면 다음과 같은 결과를 기대할 수 있습니다.
 
+테라폼으로 환경 구성을 하고 싶지 않고, 직접 리소스를 만들고 싶다면 그렇게 하셔도 좋습니다. 상단 이미지를 토대로 리소스를 생성하시면 됩니다.
+
 Site-to-Site VPN 연결 리소스를 정의하는 블럭은 다음과 같습니다:
 
 ``` terraform
@@ -265,5 +267,11 @@ ping <private-ip>
 	<img width="1381" alt="s2s11" src="https://github.com/mushroom1324/aws-s2s-vpn-terraform/assets/76674422/d072e9e5-35ca-4777-979a-a14c2e1a0889">
 
     - 저의 경우에도 해당 명령어를 통해 ‘modp1024’를 지원하지 않는 것을 파악했습니다.
+
+2. (리소스를 직접 구성하신 경우) 터널이 UP이지만 Ping이 실패하는 경우
+    - AWS Network의 EC2에 할당되어 있는 Security Group이 Customer Network VPC의 CIDR에 대해 ICMP IPv4 All traffic를 허용하는지 확인합니다.
+    - AWS Network의 Routing Table을 확인합니다. Customer Network VPC의 CIDR 범위는 Virtual Private Gateway를 향하도록 설정되어 있어야 합니다.
+    - Customer Network의 Routing Table을 확인합니다. 0.0.0.0/0 범위에 대해 Internet Gateway를 향하도록 설정되어 있어야 합니다.
+    - VPC Flow log를 활성화 하여 더욱 자세한 트러블 슈팅이 가능합니다.
 
 네, 이렇게 AWS Site to Site VPN - Libreswan 연결 실습을 해보았습니다. 개인적으로 트러블슈팅에 시간을 좀 쏟았는데요, 재미있는 경험이었습니다. 감사합니다.
