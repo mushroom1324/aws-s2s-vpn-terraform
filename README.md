@@ -248,7 +248,7 @@ sudo systemctl status ipsec.service
 
 AWS 매니지먼트 콘솔에서도 터널이 UP인 것을 확인할 수 있습니다.
 
-마지막으로! Tokyo 리전의 Customer Network 상에 있는 EC2에서 AWS Network의 private ip로 접속이 가능한지 확인합시다.
+마지막으로 Tokyo 리전의 Customer Network 상에 있는 EC2에서 AWS Network의 private ip로 접속이 가능한지 확인합니다.
 
 ```bash
 ping <private-ip>
@@ -274,4 +274,8 @@ ping <private-ip>
     - Customer Network의 Routing Table을 확인합니다. 0.0.0.0/0 범위에 대해 Internet Gateway를 향하도록 설정되어 있어야 합니다.
     - VPC Flow log를 활성화 하여 더욱 자세한 트러블 슈팅이 가능합니다.
 
-네, 이렇게 AWS Site to Site VPN - Libreswan 연결 실습을 해보았습니다. 개인적으로 트러블슈팅에 시간을 좀 쏟았는데요, 재미있는 경험이었습니다. 감사합니다.
+AWS Site to Site VPN - Libreswan 연결 실습을 완료했습니다. 실습을 완료하셨다면 다음 명령어를 통해 리소스를 삭제합니다:
+
+```bash
+terraform destroy
+```
