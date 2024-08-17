@@ -190,8 +190,8 @@ conn Tunnel1
 1. `auth=esp` 라인을 삭제합니다. 이건 Libreswan에서 지원하지 않습니다.
 2. `phase2alg` 을 `aes_gcm` 값으로 변경합니다.
 3. `ike` 을 `aes256-sha1` 값으로 변경합니다.
-4. <LOCAL NETWORK>는 Customer Network의 CIDR 값을 입력합니다. (192.168.0.0/16)
-5. <REMOTE NETWORK>는 AWS Network의 CIDR 값을 입력합니다. (10.0.0.0/16)
+4. `LOCAL NETWORK`는 Customer Network의 CIDR 값을 입력합니다. (192.168.0.0/16)
+5. `REMOTE NETWORK`는 AWS Network의 CIDR 값을 입력합니다. (10.0.0.0/16)
 
 ```bash
 conn Tunnel1
